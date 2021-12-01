@@ -1,11 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_salary/providers/auth_provider.dart';
+import 'package:flutter_salary/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final TextEditingController usernameController =
+      TextEditingController(text: '');
+
+  final TextEditingController passwordController =
+      TextEditingController(text: '');
+
+  @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleLogin() async {
+      if (await authProvider.login(
+          username: usernameController.text,
+          password: passwordController.text)) {
+        Navigator.pushNamed(context, '/main-page');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: Text(
+              'Gagal Login',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+    }
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
@@ -46,6 +80,7 @@ class SignInPage extends StatelessWidget {
                     border: Border.all(color: Colors.grey)),
                 child: Center(
                   child: TextFormField(
+                    controller: usernameController,
                     decoration: InputDecoration.collapsed(
                         hintText: 'Tulis username kamu'),
                   ),
@@ -71,6 +106,7 @@ class SignInPage extends StatelessWidget {
                     border: Border.all(color: Colors.grey)),
                 child: Center(
                   child: TextFormField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration.collapsed(
                         hintText: 'Tulis password kamu'),
@@ -92,9 +128,7 @@ class SignInPage extends StatelessWidget {
               ),
               SizedBox(height: 40),
               InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/main-page');
-                },
+                onTap: handleLogin,
                 child: Container(
                   height: 70,
                   decoration: BoxDecoration(
