@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_salary/models/login_karyawan.dart';
 import 'package:flutter_salary/pages/profile/profile_page.dart';
 import 'package:flutter_salary/pages/salary/salary_page.dart';
+import 'package:flutter_salary/providers/auth_provider.dart';
+import 'package:flutter_salary/providers/theme_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_salary/pages/home/home_page.dart';
 import 'package:flutter_salary/pages/news/news_page.dart';
+import 'package:provider/provider.dart';
 
 import 'home/home_page.dart';
 import 'news/news_page.dart';
@@ -47,9 +51,16 @@ class _MainPageState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    LoginKaryawanModel loginKaryawanModel = authProvider.loginKaryawanModel;
+
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff36A69F),
+        backgroundColor: isDarkMode ? Color(0xff2D2D2D) : Color(0xff36A69F),
         title: Text(
           appBarTitle,
           style: GoogleFonts.montserrat(
@@ -80,7 +91,8 @@ class _MainPageState extends State<MainPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Fulan",
+                        // "Fulan",
+                        loginKaryawanModel.namaKaryawan!,
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             fontSize: 16,
@@ -90,7 +102,8 @@ class _MainPageState extends State<MainPage>
                         ),
                       ),
                       Text(
-                        "Status",
+                        // "Status",
+                        loginKaryawanModel.status!,
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             fontSize: 16,
@@ -124,19 +137,37 @@ class _MainPageState extends State<MainPage>
                 onTap: () {},
               ),
               ListTile(
-                leading: Icon(
-                  Icons.dark_mode_rounded,
-                  color: Color(0xff36A69F),
-                ),
-                title: Text(
-                  'Mode Malam',
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: Color(0xff36A69F),
-                    ),
-                  ),
-                ),
-                trailing: CupertinoSwitch(value: false, onChanged: (value) {}),
+                leading: isDarkMode
+                    ? Icon(
+                        Icons.dark_mode_rounded,
+                        color: Color(0xff36A69F),
+                      )
+                    : Icon(
+                        Icons.wb_sunny,
+                        color: Color(0xff36A69F),
+                      ),
+                title: isDarkMode
+                    ? Text(
+                        'Mode Malam',
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            color: Color(0xff36A69F),
+                          ),
+                        ),
+                      )
+                    : Text(
+                        'Mode Siang',
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            color: Color(0xff36A69F),
+                          ),
+                        ),
+                      ),
+                trailing: CupertinoSwitch(
+                    value: themeProvider.isDarkMode,
+                    onChanged: (value) {
+                      themeProvider.toogleTheme(value);
+                    }),
               ),
             ],
           ),
@@ -166,7 +197,7 @@ class _MainPageState extends State<MainPage>
           ),
           tabs: <Widget>[
             Tab(text: 'Home', icon: Icon(Icons.home)),
-            Tab(text: 'Penggajian', icon: Icon(Icons.transform_rounded)),
+            Tab(text: 'Penggajian', icon: Icon(Icons.account_balance_wallet)),
             Tab(text: 'Berita', icon: Icon(Icons.now_widgets_sharp)),
             Tab(text: 'Profile', icon: Icon(Icons.person)),
           ],

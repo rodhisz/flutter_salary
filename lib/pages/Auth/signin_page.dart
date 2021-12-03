@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_salary/providers/auth_provider.dart';
+import 'package:flutter_salary/providers/theme_provider.dart';
 import 'package:flutter_salary/theme/theme.dart';
+import 'package:flutter_salary/widget/loading_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -18,11 +20,22 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController passwordController =
       TextEditingController(text: '');
 
+  bool isloading = false;
+
   @override
   Widget build(BuildContext context) {
+    final color =
+        Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+            ? Color(0xff36A69F)
+            : primaryColor;
+
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     handleLogin() async {
+      setState(() {
+        isloading = true;
+      });
+
       if (await authProvider.login(
           username: usernameController.text,
           password: passwordController.text)) {
@@ -37,6 +50,9 @@ class _SignInPageState extends State<SignInPage> {
             ),
           ),
         );
+        setState(() {
+          isloading = false;
+        });
       }
     }
 
@@ -55,7 +71,7 @@ class _SignInPageState extends State<SignInPage> {
                     textStyle: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xff36A69F),
+                      color: color,
                     ),
                   ),
                 ),
@@ -129,22 +145,24 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(height: 40),
               InkWell(
                 onTap: handleLogin,
-                child: Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color(0xff36A69F)),
-                  child: Center(
-                    child: Text(
-                      'Masuk',
-                      style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white)),
-                    ),
-                  ),
-                ),
+                child: isloading
+                    ? LoadButton()
+                    : Container(
+                        height: 70,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Color(0xff36A69F)),
+                        child: Center(
+                          child: Text(
+                            'Masuk',
+                            style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),

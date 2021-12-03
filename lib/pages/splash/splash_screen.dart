@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_salary/providers/konten_provider.dart';
+import 'package:flutter_salary/providers/news_provider.dart';
+import 'package:flutter_salary/providers/theme_provider.dart';
 import 'package:flutter_salary/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -11,16 +15,27 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
+  getInit() async {
+    await Provider.of<BeritaProvider>(context, listen: false).getAllBerita();
+    await Provider.of<ContentProvider>(context, listen: false).getAllkonten();
     Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, '/sign-in'));
   }
 
   @override
+  void initState() {
+    super.initState();
+    getInit();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final color =
+        Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+            ? Colors.grey.shade900
+            : primaryColor;
+
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: color,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

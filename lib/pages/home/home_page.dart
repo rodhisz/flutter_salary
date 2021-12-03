@@ -1,13 +1,31 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_salary/models/konten_model.dart';
+import 'package:flutter_salary/models/login_karyawan.dart';
+import 'package:flutter_salary/providers/auth_provider.dart';
+import 'package:flutter_salary/providers/konten_provider.dart';
+import 'package:flutter_salary/providers/theme_provider.dart';
 import 'package:flutter_salary/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    LoginKaryawanModel loginKaryawanModel = authProvider.loginKaryawanModel;
+
+    ContentProvider contentProvider = Provider.of<ContentProvider>(context);
+
+    List<ContentModels> listKonten = contentProvider.kontenModel;
+
+    final color =
+        Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+            ? Colors
+            : primaryColor;
+
     return Container(
       child: ListView(
         children: <Widget>[
@@ -59,7 +77,8 @@ class HomePage extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            'Fulan',
+                            // 'Fulan',
+                            loginKaryawanModel.namaKaryawan!,
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w400),
@@ -123,42 +142,60 @@ class HomePage extends StatelessWidget {
                 autoPlayInterval: Duration(seconds: 3),
                 autoPlayAnimationDuration: Duration(milliseconds: 800),
               ),
-              items: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    image: DecorationImage(
-                        image: AssetImage('images/img_konten2.jpg'),
-                        fit: BoxFit.fitWidth),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Judul Konten',
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
+              items: listKonten
+                  .map(
+                    (konten) => Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            offset: Offset(0, 5),
                           ),
-                        ),
+                        ],
+                        color: Color(0xffF5F5F5),
+                        image: DecorationImage(
+                            image: AssetImage('images/img_konten2.jpg'),
+                            fit: BoxFit.fitWidth),
                       ),
-                      Text(
-                        'Isi Konten',
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            // 'Judul Konten',
+                            konten.judulKonten!,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              // 'Isi Konten',
+                              konten.isiKonten!,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                    ),
+                  )
+                  .toList(),
             ),
           ),
           SizedBox(height: 20),

@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_salary/models/login_karyawan.dart';
+import 'package:flutter_salary/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    LoginKaryawanModel loginKaryawanModel = authProvider.loginKaryawanModel;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 35),
       child: Column(
@@ -20,7 +26,8 @@ class ProfilePage extends StatelessWidget {
           Column(
             children: [
               Text(
-                'Bubu',
+                // 'Bubu',
+                loginKaryawanModel.namaKaryawan!,
                 style: GoogleFonts.montserrat(
                   textStyle:
                       TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
@@ -28,7 +35,8 @@ class ProfilePage extends StatelessWidget {
               ),
               SizedBox(height: 5),
               Text(
-                'Meoaww',
+                // 'Meoaww',
+                loginKaryawanModel.status!,
                 style: GoogleFonts.montserrat(
                   textStyle:
                       TextStyle(fontWeight: FontWeight.w600, fontSize: 14),

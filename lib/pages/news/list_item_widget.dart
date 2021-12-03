@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_salary/models/news_model.dart';
 import 'package:flutter_salary/pages/news/list_item_news.dart';
 import 'package:flutter_salary/theme/theme.dart';
 
-Widget listItem(ListItemNews listItemNews) {
+Widget listItem(BeritaModels itemnews) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 10),
     child: Card(
@@ -17,8 +18,10 @@ Widget listItem(ListItemNews listItemNews) {
               height: 59,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image:
-                    DecorationImage(image: AssetImage(listItemNews.imgPath!)),
+                image: DecorationImage(
+                    image: NetworkImage(
+                        'https://picsum.photos/seed/picsum/200/300'),
+                    fit: BoxFit.cover),
               ),
             ),
             SizedBox(width: 12),
@@ -27,7 +30,7 @@ Widget listItem(ListItemNews listItemNews) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    listItemNews.title!,
+                    itemnews.judulBerita!,
                     style: boldFont,
                   ),
                   Column(
@@ -38,14 +41,14 @@ Widget listItem(ListItemNews listItemNews) {
                           Icon(Icons.person),
                           SizedBox(width: 3),
                           Text(
-                            listItemNews.author!,
+                            itemnews.penerbit!,
                             style: fontPrimary,
                           ),
                           SizedBox(width: 30),
                           Icon(Icons.date_range),
                           SizedBox(width: 5),
                           Text(
-                            listItemNews.date!,
+                            itemnews.tanggalTerbit!,
                             style: fontPrimary,
                           ),
                         ],
