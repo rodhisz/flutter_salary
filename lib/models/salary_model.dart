@@ -3,7 +3,7 @@ import 'package:flutter_salary/models/gaji_model.dart';
 class SalaryModel {
   int? id;
   String? idJabatan, namaKaryawan, status, tanggalMasuk, nomorHp, username;
-  List<GajiModel> gaji;
+  List<GajiModel>? gaji;
 
   SalaryModel({
     required this.id,

@@ -4,9 +4,11 @@ import 'package:flutter_salary/models/konten_model.dart';
 import 'package:flutter_salary/models/login_karyawan.dart';
 import 'package:flutter_salary/providers/auth_provider.dart';
 import 'package:flutter_salary/providers/konten_provider.dart';
+import 'package:flutter_salary/providers/salary_provider.dart';
 import 'package:flutter_salary/providers/theme_provider.dart';
 import 'package:flutter_salary/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,6 +22,13 @@ class HomePage extends StatelessWidget {
     ContentProvider contentProvider = Provider.of<ContentProvider>(context);
 
     List<ContentModels> listKonten = contentProvider.kontenModel;
+
+    SalaryProvider salaryProvider = Provider.of<SalaryProvider>(context);
+
+    int totalTunjangan =
+        int.parse(salaryProvider.data.gaji![0].totalTunjangan!);
+    int potongan = int.parse(salaryProvider.data.gaji![0].potongan!);
+    int totalGaji = int.parse(salaryProvider.data.gaji![0].totalGaji!);
 
     final color =
         Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
@@ -102,10 +111,15 @@ class HomePage extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            'Rp. 1.000.000',
+                            // 'Rp. 1.000.000',
+                            NumberFormat.currency(
+                              symbol: 'Rp. ',
+                              name: 'IDR',
+                              decimalDigits: 0,
+                            ).format(totalGaji),
                             style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w400),
+                              textStyle: TextStyle(color: blackColor),
+                              fontSize: 15,
                             ),
                           )
                         ],

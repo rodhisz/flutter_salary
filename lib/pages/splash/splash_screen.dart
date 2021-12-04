@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_salary/providers/konten_provider.dart';
 import 'package:flutter_salary/providers/news_provider.dart';
+import 'package:flutter_salary/providers/salary_provider.dart';
 import 'package:flutter_salary/providers/theme_provider.dart';
 import 'package:flutter_salary/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   getInit() async {
     await Provider.of<BeritaProvider>(context, listen: false).getAllBerita();
     await Provider.of<ContentProvider>(context, listen: false).getAllkonten();
+    await Provider.of<SalaryProvider>(context, listen: false).getPenggajian();
     Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, '/sign-in'));
   }
 

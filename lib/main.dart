@@ -7,6 +7,7 @@ import 'package:flutter_salary/pages/splash/splash_screen.dart';
 import 'package:flutter_salary/providers/auth_provider.dart';
 import 'package:flutter_salary/providers/konten_provider.dart';
 import 'package:flutter_salary/providers/news_provider.dart';
+import 'package:flutter_salary/providers/salary_provider.dart';
 import 'package:flutter_salary/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => BeritaProvider()),
         ChangeNotifierProvider(create: (context) => ContentProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => SalaryProvider()),
       ],
       builder: (context, _) {
         final changeTheme = Provider.of<ThemeProvider>(context);
